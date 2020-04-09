@@ -1,0 +1,7 @@
+<manifest>
+  <data>
+    <code>reactjs/sample_app</code>
+    <title>ReactJS Sample Application</title>
+  </data>
+  <sobject search_type="config/prod_setting" path="prod_setting.spt" expression="@SOBJECT(config/prod_setting['code', 'like', 'REACTJS%'])" ignore_columns="id, timestamp"/>
+</manifest>

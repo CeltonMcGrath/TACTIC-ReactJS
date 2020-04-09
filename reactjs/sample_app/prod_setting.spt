@@ -1,0 +1,8 @@
+#-- Start Entry --#
+insert = SearchType.create('config/prod_setting')
+insert.set_value('code', """REACTJS_PROJECTSETTING00001""")
+insert.set_value('description', """React App build folder""")
+insert.set_value('key', """reactjs/index""")
+insert.set_value('value', """/reactjs/sample_app/build/index.html""")
+#-- End Entry --#
+

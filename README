@@ -1,0 +1,16 @@
+
+
+# How to create an application with a ReactJS front-end and TACTIC back-end
+
+You need a TACTIC Plugin that contains a project setting 
+
+reactjs/build_dir 
+
+and you need to place the build directory of your React App at this location.
+The location should be accessible by apache (ie. /plugins, or directly in your plugin folder.)
+
+ie.
+
+key = reactjs/build_dir
+value = "/plugins/my_app_plugin/build"
+
