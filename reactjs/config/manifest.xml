@@ -1,0 +1,7 @@
+<manifest>
+  <data>
+    <code>reactjs/config</code>
+    <title>ReactJS Config</title>
+  </data>
+  <sobject search_type="config/url" path="url.spt" expression="@SOBJECT(config/url['code', 'like', 'REACTJS%'])" ignore_columns="id,timestamp"/>
+</manifest>
