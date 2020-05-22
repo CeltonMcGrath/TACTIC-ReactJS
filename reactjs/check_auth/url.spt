@@ -1,0 +1,7 @@
+#-- Start Entry --#
+insert = SearchType.create('config/url')
+insert.set_value('code', """REACTJS_CHECKAUTH_URL00001""")
+insert.set_value('url', """/checkauth/v1""")
+insert.set_value('widget', """<element name='checkauth' top_wdg_cls='reactjs.check_auth.ReactCheckAuthHandler'/>""")
+#-- End Entry --#
+

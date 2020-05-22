@@ -1,7 +1,7 @@
 #-- Start Entry --#
 insert = SearchType.create('config/url')
-insert.set_value('code', """REACTJS_URL00001""")
+insert.set_value('code', """REACTJS_CONFIG_URL00001""")
 insert.set_value('url', """/index""")
-insert.set_value('widget', """<element top_wdg_cls='reactjs.ReactWdg'/>""")
+insert.set_value('widget', """<element top_wdg_cls='reactjs.config.ReactWdg'/>""")
 #-- End Entry --#
 
