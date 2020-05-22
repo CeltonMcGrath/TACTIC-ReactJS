@@ -17,6 +17,21 @@ import Login from './Login';
 import Dashboard from './Dashboard';
 import Classroom from './Classroom';
 
+import {makeStyles, AppBar, Toolbar, IconButton, Button} from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
+
+const useStyles = makeStyles((theme) => ({
+  app: {
+  	height: '100vh',
+  	width: '100vw',
+  	display: 'flex',
+  	flexDirection: 'column'
+  },
+  main: {
+  	flexGrow: '1'
+  }
+}));
+
 
 function Header() {
 
@@ -26,28 +41,40 @@ function Header() {
 		<AuthConsumer>
 	         {({userInfo}) => {
 
+               let links;
 	           if (!userInfo) {
-	              return (
-	              	<div className="header">
-	              	  <Link className="nav-link" to="/home">Home</Link>
-				      <Link className="nav-link" to="/about">About</Link>
-				      <Link className="nav-link" to="/login">Login</Link>
+	              links = (
+	              	<div className="appbar-links">
+	              	  <Button component={Link} color="inherit" to="/home">Home</Button>
+				      <Button component={Link} color="inherit" to="/about">About</Button>
+				      <Button component={Link} color="inherit" to="/login">Login</Button>
 				     </div>
 				   );
 	           } 
 	           
 	           else {
-	             return (
-	             	<div className="header">
-	              <Link className="nav-link" to="/home">Home</Link>
-			      <Link className="nav-link" to="/login">Login</Link>
-			      <Link className="nav-link" to="/about">About</Link>
-				  <Link className="nav-link" to="/dashboard">Dashboard</Link>
-				  <Link className="nav-link" to="/classroom">Classroom</Link>
+	             links = (
+	             	<div className="appbar-links">
+	              <Button component={Link} color="inherit" to="/home">Home</Button>
+			      <Button component={Link} color="inherit" to="/about">About</Button>
+				  <Button component={Link} color="inherit" to="/dashboard">Dashboard</Button>
+				  <Button component={Link} color="inherit" to="/classroom">Classroom</Button>
+				  <Button component={Link} color="inherit">Logout</Button>
 	                </div>
 
 				  );
 	           }
+
+	          return (
+	          	<AppBar position="static">
+				  <Toolbar>
+				    <IconButton edge="start" color="inherit" aria-label="menu">
+				      <MenuIcon />
+				    </IconButton>
+				    {links}
+				  </Toolbar>
+				</AppBar>
+			);
 
 	  
 	         }}
@@ -61,14 +88,14 @@ function App() {
 
   let server = new TACTIC();
   const authUrl = server.getCheckAuthEndpoint(); 
+  const classes = useStyles();
 
   return (
 	<AuthProvider authUrl={authUrl}>
-		
-		<div className="app">
+		<div className={classes.app}>
 			<Router>
 			    <Header/>
-			    <div className="main">
+			    <div className={classes.main}>
 				<Switch>
 					
 					<Route path="/about">

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {TextField} from '@material-ui/core';
-import { Button, FormControl, makeStyles } from '@material-ui/core';
+import {Container, Button, FormControl, makeStyles } from '@material-ui/core';
+
 
 import TACTIC from './tactic/Tactic';
 
@@ -10,8 +11,17 @@ const useStyles = makeStyles((theme) => ({
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
       width: '25ch',
+      display: 'flex',
+      flexDirection: 'column',
+
     },
   },
+  login: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%'
+  }
 }));
 
 export default function Login() {
@@ -29,13 +39,10 @@ export default function Login() {
     server.login(email, password);
   }
 
-  function callEval() {
-    let server = new TACTIC();
-    server.request("eval", ["@SOBJECT(fitnessmedia/class)"], {}).then(data => console.log(data));
-  }
+
 
   return (
-    <div className="Login">
+    <Container className={classes.login}>
       <form onSubmit={handleSubmit} className={classes.root}>
         <TextField value={email} id="email" onChange={e => setEmail(e.target.value)} label="Email" autoFocus />
         <TextField type="password" value={password} id="password" onChange={e => setPassword(e.target.value)} label="Password" />
@@ -43,7 +50,6 @@ export default function Login() {
           Login
         </Button>
       </form>
-      <Button onClick={callEval}>Call Eval</Button>
-    </div>
+    </Container>
   );
 }

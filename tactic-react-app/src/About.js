@@ -1,12 +1,12 @@
 import React from "react";
-import { Button } from '@material-ui/core';
+import {Container} from '@material-ui/core';
 
 import TACTIC from './tactic/Tactic';
 
-export default function Home() {
+export default function About() {
   return (
-    <div className="home">
-      Hello World!
-    </div>
+    <Container>
+      <h1>TACTIC - React Integration Example</h1>
+    </Container>
   );
 }
