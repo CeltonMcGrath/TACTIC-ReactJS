@@ -39,30 +39,34 @@ function Header() {
 	return (
 
 		<AuthConsumer>
-	         {({userInfo}) => {
+	         {({userInfo, refreshAuth}) => {
 
-               let links;
+	           function logout() {
+	             let server = new TACTIC();
+	             server.logout();
+	             refreshAuth();
+	           }
+
+
+		   let links;
 	           if (!userInfo) {
 	              links = (
-	              	<div className="appbar-links">
+	               	<div className="appbar-links">
 	              	  <Button component={Link} color="inherit" to="/home">Home</Button>
-				      <Button component={Link} color="inherit" to="/about">About</Button>
-				      <Button component={Link} color="inherit" to="/login">Login</Button>
-				     </div>
-				   );
-	           } 
-	           
-	           else {
+			  <Button component={Link} color="inherit" to="/about">About</Button>
+			  <Button component={Link} color="inherit" to="/login">Login</Button>
+		        </div>
+		     );
+	           } else {
 	             links = (
-	             	<div className="appbar-links">
-	              <Button component={Link} color="inherit" to="/home">Home</Button>
-			      <Button component={Link} color="inherit" to="/about">About</Button>
-				  <Button component={Link} color="inherit" to="/dashboard">Dashboard</Button>
-				  <Button component={Link} color="inherit" to="/classroom">Classroom</Button>
-				  <Button component={Link} color="inherit">Logout</Button>
-	                </div>
-
-				  );
+		       <div className="appbar-links">
+			 <Button component={Link} color="inherit" to="/home">Home</Button>
+			 <Button component={Link} color="inherit" to="/about">About</Button>
+			 <Button component={Link} color="inherit" to="/dashboard">Dashboard</Button>
+			 <Button component={Link} color="inherit" to="/classroom">Classroom</Button>
+			 <Button onClick={logout} color="inherit">Logout</Button>
+		       </div>
+		     );
 	           }
 
 	          return (
@@ -87,38 +91,36 @@ function Header() {
 function App() {
 
   let server = new TACTIC();
-  const authUrl = server.getCheckAuthEndpoint(); 
+  let authUrl = server.getCheckAuthEndpoint(); 
   const classes = useStyles();
 
   return (
-	<AuthProvider authUrl={authUrl}>
-		<div className={classes.app}>
-			<Router>
-			    <Header/>
-			    <div className={classes.main}>
-				<Switch>
-					
-					<Route path="/about">
-						<About />
-					</Route>
-					<Route path="/login">
-						<Login />
-					</Route>
-					<Route path="/dashboard">
-						<Dashboard />
-					</Route>
-					<Route path="/classroom">
-						<Classroom />
-					</Route>
-					<Route path="/">
-						<Home />
-					</Route>
-				</Switch>
-				</div>
-			</Router>
-		</div>    
-	</AuthProvider>
-
+    <AuthProvider authUrl={authUrl} reqOptions={{mode: 'cors', credentials: 'include'}}>
+      <div className={classes.app}>
+	<Router>
+	  <Header/>
+	    <div className={classes.main}>
+	      <Switch>
+		<Route path="/about">
+		  <About />
+		</Route>
+		<Route path="/login">
+		  <Login />
+		</Route>
+		<Route path="/dashboard">
+		  <Dashboard />
+		</Route>
+		<Route path="/classroom">
+		  <Classroom />
+		</Route>
+		<Route path="/">
+		  <Home />
+		</Route>
+	      </Switch>
+	    </div>
+	  </Router>
+	</div>    
+    </AuthProvider>
   );
 }
 

@@ -3,18 +3,33 @@ import Cookies from 'universal-cookie';
 
 class TACTIC {
 
-    constructor() {
-        this.server_url = process.env.REACT_APP_TACTIC_SERVER_URL;
-      	this.site = process.env.REACT_APP_TACTIC_SITE;
-      	this.project = process.env.REACT_APP_TACTIC_PROJECT;
-      	this.check_auth_endpoint = this.server_url + "/" + this.site + "/" + this.project + process.env.REACT_APP_TACTIC_CHECK_AUTH_ENDPOINT;
-    }
+  constructor() {
+      this.server_url = process.env.REACT_APP_TACTIC_SERVER_URL;
+      this.site = process.env.REACT_APP_TACTIC_SITE;
+      this.project = process.env.REACT_APP_TACTIC_PROJECT;
+      this.check_auth_endpoint = this.server_url;
+      if (this.site && this.site != "default") this.check_auth_endpoint += "/" + this.site;
+      else this.check_auth_endpoint += "/tactic";
+      this.check_auth_endpoint += "/" + this.project + process.env.REACT_APP_TACTIC_CHECK_AUTH_ENDPOINT;
+      
+      this.cors = process.env.REACT_APP_TACTIC_CORS;
+  }
 
-    getCheckAuthEndpoint() {
-    	return this.check_auth_endpoint;
-    }
+  getCheckAuthEndpoint() {
+      let url =  this.check_auth_endpoint 
+      return url;
+  }
 
-	login(username, password) {
+  logout() {
+    const cookies = new Cookies();
+    cookies.set('login_ticket', '');
+  }
+
+  login(username, password) {
+      return new Promise( 
+	 (resolve, reject) => { 
+
+
 		this.username = username;
 		this.password = password;
 
@@ -39,62 +54,72 @@ class TACTIC {
 			﻿body = body.replace("PASSWORD", password)
 			body = body.replace("SITE", this.site)
 
-			fetch(url, {
+			let fetch_config = {
 			 'method': 'POST',
-			 'headers': {
+		         'headers': {
 			      'Content-Type': 'text/xml'
 			  },
 			  'body': body
-			}).then(resp => resp.text()).then(data => {
-				let pattern = ".*<string>(.*)</string>.*";
-	            let re = RegExp(pattern);
-	            let ticket = data.match(re)[1];
+			}
 
-	            const cookies = new Cookies();
-				cookies.set('login_ticket', ticket, {'domain': this.server_url});
-			});
+		        if (this.cors) fetch_config['mode'] = 'cors';
+
+			fetch(url, fetch_config)
+			.then(resp => resp.text())
+		        .then(data => {
+			  let pattern = ".*<string>(.*)</string>.*";
+			  let re = RegExp(pattern);
+			  let ticket = data.match(re)[1];
+
+			  const cookies = new Cookies();
+			  cookies.set('login_ticket', ticket);
+			  resolve(ticket);
+			}).catch(reject);
 		}
 
-        
+		   });
 
         
 		
 
 	}
 
-	getTicket() {
-		const cookies = new Cookies();
-		return cookies.get('login_ticket'); 
-	}
+  getTicket() {
+	  const cookies = new Cookies();
+	  return cookies.get('login_ticket'); 
+  }
 
-	_request(url) {
-		return new Promise(
-	    	(resolve, reject) => {
-			    fetch(url, {method: 'POST'})
-			    .then(resp => resp.json().then(resolve))
-			    .catch(error => reject(error));
-			}
-		);
-	};
+  _request(url) {
+	  return new Promise(
+	  (resolve, reject) => {
+	      let fetch_config = {method: 'POST'};
+	      if (this.cors) fetch_config['mode'] = 'cors';
 
-	request(method, args, kwargs) {
-        let login_ticket = this.getTicket();
+	      fetch(url, fetch_config)
+	      .then(resp => resp.json().then(resolve))
+	      .catch(error => reject(error));
+	    }
+	  );
+  };
 
-		let url = this.server_url;
-		url += "/tactic/" + this.site + "/"  + this.project + "/" + "REST";
-		url += "?login_ticket=" + login_ticket;
- 		url += "&method=" + method;
- 		if (args) url += "&args=" + JSON.stringify(args);
-		if (kwargs) url += "&kwargs=" + JSON.stringify(kwargs);
+  request(method, args, kwargs) {
+  let login_ticket = this.getTicket();
 
-		return new Promise(
-			(resolve, reject) => {
-				this._request(url)
-				.then(resolve)
-				.catch(reject);
-			}
-		)
-	}
+	  let url = this.server_url;
+	  url += "/tactic/" + this.site + "/"  + this.project + "/" + "REST";
+	  url += "?login_ticket=" + login_ticket;
+	  url += "&method=" + method;
+	  if (args) url += "&args=" + JSON.stringify(args);
+	  if (kwargs) url += "&kwargs=" + JSON.stringify(kwargs);
+
+	  return new Promise(
+		  (resolve, reject) => {
+			  this._request(url)
+			  .then(resolve)
+			  .catch(reject);
+		  }
+	  )
+  }
 
 
 }

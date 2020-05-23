@@ -1,7 +1,7 @@
 {
   "name": "tactic-react-app",
   "version": "0.1.0",
-  "homepage": "/plugins/reactjs/sample_app/build",
+  "homepage": "/app",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.9.14",
