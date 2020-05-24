@@ -15,7 +15,6 @@ import Home from './Home';
 import About from './About';
 import Login from './Login';
 import Dashboard from './Dashboard';
-import Classroom from './Classroom';
 
 import {makeStyles, AppBar, Toolbar, IconButton, Button} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -63,7 +62,6 @@ function Header() {
 			 <Button component={Link} color="inherit" to="/home">Home</Button>
 			 <Button component={Link} color="inherit" to="/about">About</Button>
 			 <Button component={Link} color="inherit" to="/dashboard">Dashboard</Button>
-			 <Button component={Link} color="inherit" to="/classroom">Classroom</Button>
 			 <Button onClick={logout} color="inherit">Logout</Button>
 		       </div>
 		     );
@@ -109,9 +107,6 @@ function App() {
 		</Route>
 		<Route path="/dashboard">
 		  <Dashboard />
-		</Route>
-		<Route path="/classroom">
-		  <Classroom />
 		</Route>
 		<Route path="/">
 		  <Home />
