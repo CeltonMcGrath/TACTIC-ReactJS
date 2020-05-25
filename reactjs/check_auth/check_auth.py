@@ -20,10 +20,12 @@ class ReactCheckAuthHandler(BaseRefreshWdg):
         login_ticket = web.get_cookie("login_ticket")
         if not login_ticket:
             raise Exception("No ticket")
-
+ 
+        
         ticket_sobj = Ticket.get_by_valid_key(login_ticket)
-        if not ticket_sobj:
+        if not ticket_sobj or ticket_sobj.get_value("login") == "guest":
             raise Exception("Permission denied")
+        
         
         results = {'code': 'LOGIN0001', 'name': '000001'}
  
